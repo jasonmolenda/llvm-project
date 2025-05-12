@@ -10,10 +10,16 @@ import os
 class TestUnwindFramelessFaulted(TestBase):
     NO_DEBUG_INFO_TESTCASE = True
 
-    @skipIf(
-        oslist=no_match([lldbplatformutil.getDarwinOSTriples(), "linux"]),
-        archs=no_match(["aarch64", "arm64", "arm64e"]),
-    )
+    @skipIf(oslist=no_match([lldbplatformutil.getDarwinOSTriples()]))
+    @skipIf(archs=no_match(["aarch64", "arm64", "arm64e"]))
+
+    # The static linker in Xcode 15.0-15.2 on macOS 14 will mislink
+    # the eh_frame addresses; ld-classic in those tools is one workaround.
+    # This issue was fixed in Xcode 15.3, but it's not straightforward
+    # to test for the linker version or Xcode version so  tie this to
+    # macOS 15 which uses Xcode 16 and does not have the issues.
+    @skipIf(macos_version=["<", "15.0"])
+
     def test_frameless_faulted_unwind(self):
         self.build()
 

@@ -30,6 +30,9 @@
 // trap() knows to branch back to $x23 when it has finished.
 //--------------------------------------
   .globl  TO_BE_INTERRUPTED
+#if defined(__APPLE__)
+  .p2align 2
+#endif
 TO_BE_INTERRUPTED:
   .cfi_startproc
 
@@ -69,6 +72,9 @@ L_.return:
 // break_to_debugger().
 //--------------------------------------
   .globl  TRAP
+#if defined(__APPLE__)
+  .p2align 2
+#endif
 TRAP:
   .cfi_startproc
   .cfi_signal_frame
@@ -113,6 +119,9 @@ TRAP:
 // break_to_debugger() executes a BRK instruction
 //--------------------------------------
   .globl BREAK_TO_DEBUGGER
+#if defined(__APPLE__)
+  .p2align 2
+#endif
 BREAK_TO_DEBUGGER:
   .cfi_startproc
 
